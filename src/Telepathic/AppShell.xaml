@@ -27,6 +27,12 @@
         ContentTemplate="{DataTemplate pages:ManageMetaPage}"
         Route="manage" />
 
+    <ShellContent
+      Title="Admin"
+      Icon="{StaticResource IconMeta}"
+      ContentTemplate="{DataTemplate pages:HybridPage}"
+      Route="admin" />
+
     <Shell.FlyoutHeader>
         <Grid HorizontalOptions="Fill" VerticalOptions="Start">
             <Image Source="{AppThemeBinding Light=flyoutheader_light.png, Dark=flyoutheader_dark.png}" 

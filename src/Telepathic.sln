@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telepathic", "Telepathic\Telepathic.csproj", "{7055C9B7-C9AE-4D93-9A85-563EBB9CCE41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telepathic.Shared", "Telepathic.Shared\Telepathic.Shared.csproj", "{24D109D1-887B-749E-297C-C0D4B985843E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telepathic.Web", "Telepathic.Web\Telepathic.Web.csproj", "{C7A4CC88-011A-B37A-6508-72FBFB2EF016}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +21,7 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7055C9B7-C9AE-4D93-9A85-563EBB9CCE41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7055C9B7-C9AE-4D93-9A85-563EBB9CCE41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7055C9B7-C9AE-4D93-9A85-563EBB9CCE41}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{7055C9B7-C9AE-4D93-9A85-563EBB9CCE41}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{7055C9B7-C9AE-4D93-9A85-563EBB9CCE41}.Debug|x64.Build.0 = Debug|Any CPU
 		{7055C9B7-C9AE-4D93-9A85-563EBB9CCE41}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -27,8 +32,35 @@ Global
 		{7055C9B7-C9AE-4D93-9A85-563EBB9CCE41}.Release|x64.Build.0 = Release|Any CPU
 		{7055C9B7-C9AE-4D93-9A85-563EBB9CCE41}.Release|x86.ActiveCfg = Release|Any CPU
 		{7055C9B7-C9AE-4D93-9A85-563EBB9CCE41}.Release|x86.Build.0 = Release|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Debug|x64.Build.0 = Debug|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Debug|x86.Build.0 = Debug|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Release|x64.ActiveCfg = Release|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Release|x64.Build.0 = Release|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Release|x86.ActiveCfg = Release|Any CPU
+		{24D109D1-887B-749E-297C-C0D4B985843E}.Release|x86.Build.0 = Release|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Debug|x64.Build.0 = Debug|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Debug|x86.Build.0 = Debug|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Release|x64.ActiveCfg = Release|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Release|x64.Build.0 = Release|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Release|x86.ActiveCfg = Release|Any CPU
+		{C7A4CC88-011A-B37A-6508-72FBFB2EF016}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {111C5172-F24B-480B-8B0A-BC81FC4892B0}
 	EndGlobalSection
 EndGlobal

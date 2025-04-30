@@ -6,6 +6,7 @@ using Plugin.Maui.Audio;
 using Plugin.Maui.CalendarStore;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
+using Telepathic.Shared.Services;
 
 namespace Telepathic;
 
@@ -49,12 +50,17 @@ public static class MauiProgram
 				fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
 			});
 
+        builder.Services.AddMauiBlazorWebView();
+
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Services.AddBlazorWebViewDeveloperTools();
+        builder.Logging.AddDebug();
 		builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
 
-		builder.Services.AddSingleton(CalendarStore.Default);
+        builder.Services.AddSingleton<IFormFactor, FormFactor>();
+
+        builder.Services.AddSingleton(CalendarStore.Default);
 		builder.Services.AddSingleton<ProjectRepository>();
 		builder.Services.AddSingleton<TaskRepository>();
 		builder.Services.AddSingleton<CategoryRepository>();
@@ -66,7 +72,8 @@ public static class MauiProgram
 		builder.Services.AddSingleton<ManageMetaPageModel>();
 		builder.Services.AddSingleton<IAudioService, AudioService>();
 		builder.Services.AddSingleton<ITranscriptionService, WhisperTranscriptionService>();
-		builder.Services.AddSingleton<IChatClientService, ChatClientService>();		builder.Services.AddTransientWithShellRoute<ProjectDetailPage, ProjectDetailPageModel>("project");
+		builder.Services.AddSingleton<IChatClientService, ChatClientService>();		
+		builder.Services.AddTransientWithShellRoute<ProjectDetailPage, ProjectDetailPageModel>("project");
 		builder.Services.AddTransientWithShellRoute<TaskDetailPage, TaskDetailPageModel>("task");
 		builder.Services.AddTransientWithShellRoute<Pages.VoiceModalPage, PageModels.VoiceModalPageModel>("voice");
 		builder.Services.AddTransientWithShellRoute<Pages.PhotoPage, PageModels.PhotoPageModel>("photo");
