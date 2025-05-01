@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using ProjectTask = Telepathic.Shared.Models.ProjectTask;
+using Telepathic.Web.Models;
 
 namespace Telepathic.Web.Data.Repositories;
 

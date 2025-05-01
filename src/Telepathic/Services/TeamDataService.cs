@@ -1,44 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Json;
+using System.Diagnostics;
 using Telepathic.Shared.Models;
 using Telepathic.Shared.Services;
+using Telepathic.Utilities;
 
-namespace Telepathic.Services
+namespace Telepathic.Services;
+
+public class TeamDataService : ITeamDataService
 {
-    public class TeamDataService : ITeamDataService
+    public async Task<IEnumerable<TeamTaskLoad>> GetTeamTaskLoadAsync()
     {
-        //TODO: Implement the methods to interact with the data source (WebAPIs)
-        public Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        IEnumerable<TeamTaskLoad> teamTaskLoad = Array.Empty<TeamTaskLoad>();
+        try
         {
-            throw new NotImplementedException();
-        }
+            var httpClient = HttpClientHelper.GetHttpClient();
+            var Url = HttpClientHelper.TeamTaskLoadUrl;
 
-        public Task<IEnumerable<Project>> GetAllProjectsAsync()
-        {
-            throw new NotImplementedException();
+            teamTaskLoad = await httpClient.GetFromJsonAsync<IEnumerable<TeamTaskLoad>>(Url) ?? [];
         }
+        catch (HttpRequestException httpEx)
+        {
+            Debug.WriteLine($"HTTP Request error: {httpEx.Message}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"An error occurred: {ex.Message}");
+        }
+        return teamTaskLoad;
+    }
 
-        public Task<IEnumerable<TeamMember>> GetAllTeamMembersAsync()
+    public async Task<IEnumerable<CategoryTaskLoad>> GetCategoryTaskLoadAsync()
+    {
+       IEnumerable<CategoryTaskLoad> categoryTaskLoad = Array.Empty<CategoryTaskLoad>();
+        try
         {
-            throw new NotImplementedException();
+            var httpClient = HttpClientHelper.GetHttpClient();
+            var Url = HttpClientHelper.CategoryTaskLoadUrl;
+            categoryTaskLoad = await httpClient.GetFromJsonAsync<IEnumerable<CategoryTaskLoad>>(Url) ?? [];
         }
+        catch (HttpRequestException httpEx)
+        {
+            Debug.WriteLine($"HTTP Request error: {httpEx.Message}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"An error occurred: {ex.Message}");
+        }
+        return categoryTaskLoad;
+    }
 
-        public Task<IEnumerable<Project>> GetProjectsByCategoryIdAsync(int categoryId)
+    public async Task<IEnumerable<TasksDue>> GetTasksDueAsync()
+    {
+        IEnumerable<TasksDue> tasksDue = Array.Empty<TasksDue>();
+        try
         {
-            throw new NotImplementedException();
+            var httpClient = HttpClientHelper.GetHttpClient();
+            var Url = HttpClientHelper.TasksDueUrl;
+            tasksDue = await httpClient.GetFromJsonAsync<IEnumerable<TasksDue>>(Url) ?? [];
         }
-
-        public Task<IEnumerable<Project>> GetProjectsByTeamMemberIdAsync(int teamMemberId)
+        catch (HttpRequestException httpEx)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine($"HTTP Request error: {httpEx.Message}");
         }
-
-        public Task<TeamMember> GetTeamMemberByIdAsync(int id)
+        catch (Exception ex)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine($"An error occurred: {ex.Message}");
         }
+        return tasksDue;
     }
 }

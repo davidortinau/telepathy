@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using Telepathic.Shared.Models;
+using Telepathic.Web.Models;
 
 namespace Telepathic.Web.Data.Repositories;
 
