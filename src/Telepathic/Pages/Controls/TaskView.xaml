@@ -13,7 +13,7 @@
     x:Class="Telepathic.Pages.Controls.TaskView"
     x:Name="rootBorder"
     StrokeShape="RoundRectangle 20"
-    BackgroundColor="{toolkit:AppThemeResource Surface1}"
+    BackgroundColor="{toolkit:AppThemeResource Surface0}"
     StrokeThickness="{Binding IsRecommendation, Converter={StaticResource BoolToThicknessConverter}, ConverterParameter=2}"
     x:DataType="models:ProjectTask">
       <Border.Resources>

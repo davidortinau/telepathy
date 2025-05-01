@@ -33,7 +33,7 @@
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
             <toolkit:BoolToObjectConverter x:Key="TelepathyIconConverter"
                                            TrueObject="icon_telepathy_on.png"
-                                           FalseObject="icon_telepathy_off.png"/>
+                                           FalseObject="{AppThemeBinding Dark=icon_telepathy_dark_off.png, Light=icon_telepathy_dark_on.png}"/>
             <toolkit:MathExpressionConverter x:Key="MathExpressionConverter"/>
             <toolkit:MultiMathExpressionConverter x:Key="MultiMathExpressionConverter"/>
         </ResourceDictionary>
@@ -47,6 +47,7 @@
                          Aspect="AspectFit"
                          HeightRequest="44"
                          WidthRequest="44"
+                         Background="Transparent"
                          Command="{Binding ShowSettingsCommand}"/>
         </Grid>
     </Shell.TitleView>
@@ -97,7 +98,7 @@
                             Margin="0,0,0,12">                            
                             <Label Text="Priority Tasks"
                                    Style="{StaticResource Title2}"
-                                   TextColor="{toolkit:AppThemeResource Primary}"/>
+                                   TextColor="{toolkit:AppThemeResource Tertiary}"/>
                             <Label Text="How about tackling these tasks first?"
                                    Margin="0,0,0,12"/>
                             <VerticalStackLayout
@@ -276,13 +277,10 @@
 
         <!-- Settings Bottom Sheet -->
         <bottomSheet:SfBottomSheet x:Name="SettingsSheet"
-                                   IsOpen="{Binding IsSettingsSheetOpen, Mode=TwoWay}"
-                                   VerticalOptions="Fill"
-                                   MinimumHeightRequest="400"
+                                   IsOpen="{Binding IsSettingsSheetOpen, Mode=TwoWay}"                                    
                                    GrabberBackground="{toolkit:AppThemeResource OnBackground}"
                                    GrabberHeight="5"
                                    Background="{toolkit:AppThemeResource Surface1}"
-                                   BackgroundColor="Transparent"
                                    CornerRadius="24">
             <bottomSheet:SfBottomSheet.BottomSheetContent>
                 <ScrollView>

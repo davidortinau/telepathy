@@ -5,47 +5,50 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <toolkit:AppThemeColor x:Key="Secondary"
-        Light="#AC3420"
-        Dark="#D74128" />
-
     <toolkit:AppThemeColor x:Key="Primary"
         Light="#F04B25"
         Dark="#F04B25" />
+    
+    <toolkit:AppThemeColor x:Key="Secondary"
+        Light="#AC3420"
+        Dark="#EA482D" />
+
+    <toolkit:AppThemeColor x:Key="Tertiary"
+        Light="#4BA0BF"
+        Dark="#4BA0BF" />
+
+    <toolkit:AppThemeColor x:Key="Quaternary"
+        Light="#FFC728"
+        Dark="#FFC728" />
 
     <toolkit:AppThemeColor x:Key="Background"
-        Light="#FBF8D4"
+        Light="#F5F5F5"
         Dark="#121212" />
 
     <toolkit:AppThemeColor x:Key="OnBackground"
         Light="#000000"
-        Dark="#F5F5F5" />
+        Dark="#FFFFFF" />
 
     <toolkit:AppThemeColor x:Key="OnPrimary"
-        Light="#FBF8D4"
-        Dark="#FBF8D4" />
+        Light="#F5F5F5"
+        Dark="#F5F5F5" />
 
     <toolkit:AppThemeColor x:Key="Surface0"
-        Light="#F8F4BC"
+        Light="#FFFFFF"
         Dark="#1E1E1E" />
 
-    <!-- E1DFBF -->
     <toolkit:AppThemeColor x:Key="Surface1"
-        Light="#F7E8A6"
+        Light="#DBDBDB"
         Dark="#2B2B2B" />
 
     <toolkit:AppThemeColor x:Key="Surface2"
-        Light="#F4EC8E"
+        Light="#CECECE"
         Dark="#383838" />
 
     <toolkit:AppThemeColor x:Key="Surface3"
-        Light="#F2E876"
-        Dark="#242424" />
+        Light="#C2C2C2"
+        Dark="#454545" />
 
-
-    
-
-    <!-- Standard black and white -->
     <Color x:Key="White">#FFFFFF</Color>
     <Color x:Key="Black">#000000</Color>    
 
@@ -67,10 +70,11 @@
         Light="{StaticResource Gray300}"
         Dark="{StaticResource Gray600}" />
 
+
     <LinearGradientBrush x:Key="AIBrush" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Color="#6EAA06" Offset="0.0" />
-        <GradientStop Color="#F27405" Offset="0.5" />
-        <GradientStop Color="#F2B705" Offset="1.0" />
+        <GradientStop Color="{toolkit:AppThemeResource Primary}" Offset="0.0" />
+        <GradientStop Color="{toolkit:AppThemeResource Tertiary}" Offset="0.5" />
+        <GradientStop Color="{toolkit:AppThemeResource Quaternary}" Offset="1.0" />
     </LinearGradientBrush>
 
 </ResourceDictionary>

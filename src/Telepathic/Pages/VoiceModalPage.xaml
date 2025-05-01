@@ -152,13 +152,14 @@
                 <StackLayout IsVisible="{Binding Projects.Count, Converter={StaticResource CountToBoolConverter}}"
                     Spacing="{StaticResource LayoutSpacing}"
                     >
-                    <Label Text="Projects" Style="{StaticResource Title1}" />
+                    <Label Text="Projects" Style="{StaticResource Title1}" TextColor="{toolkit:AppThemeResource Tertiary}" />
                     <VerticalStackLayout BindableLayout.ItemsSource="{Binding Projects}"
                         Spacing="{StaticResource LayoutSpacing}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="models:Project">
                                 <VerticalStackLayout Spacing="{StaticResource LayoutSpacing}">
                                     <Label Text="{Binding Name}" 
+                                        TextColor="{toolkit:AppThemeResource Quaternary}"
                                         Style="{StaticResource Title2}" />
                                     <VerticalStackLayout BindableLayout.ItemsSource="{Binding Tasks}"
                                         Spacing="{StaticResource LayoutSpacing}">
