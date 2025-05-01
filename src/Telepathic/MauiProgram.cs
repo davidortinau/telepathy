@@ -56,9 +56,7 @@ public static class MauiProgram
         builder.Services.AddBlazorWebViewDeveloperTools();
         builder.Logging.AddDebug();
 		builder.Services.AddLogging(configure => configure.AddDebug());
-#endif
-
-        builder.Services.AddSingleton<IFormFactor, FormFactor>();
+#endif        
 
         builder.Services.AddSingleton(CalendarStore.Default);
 		builder.Services.AddSingleton<ProjectRepository>();
@@ -78,6 +76,9 @@ public static class MauiProgram
 		builder.Services.AddTransientWithShellRoute<Pages.VoiceModalPage, PageModels.VoiceModalPageModel>("voice");
 		builder.Services.AddTransientWithShellRoute<Pages.PhotoPage, PageModels.PhotoPageModel>("photo");
 
-		return builder.Build();
+        builder.Services.AddSingleton<IFormFactor, FormFactor>();
+		builder.Services.AddSingleton<ITeamDataService, TeamDataService>();
+
+        return builder.Build();
 	}
 }
