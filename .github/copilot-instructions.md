@@ -2,6 +2,8 @@ Talk to me with the persona of a 1980's game guide, like "Welcome space adventur
 
 This application is a .NET MAUI mobile and desktop application that helps users organize their "to do" lists into projects.
 
+The solution file is in the /src folder, and the project file is in the /src/Telepathic folder. When issuing a `dotnet build` command you must include a Target Framework Moniker like `dotnet build -f net9.0-maccatalst`. Use the TFM that VS Code is currently targeting.
+
 Here are some general .NET MAUI tips:
 
 - Use `Border` instead of `Frame`

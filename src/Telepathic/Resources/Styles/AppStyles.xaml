@@ -79,7 +79,7 @@
         <FontImageSource x:Key="IconAdd"
                          Glyph="{x:Static f:FluentUI.add_32_regular}"
                          FontFamily="{x:Static f:FluentUI.FontFamily}"
-                         Color="#F2E8C4"
+                         Color="{toolkit:AppThemeResource OnPrimary}"
                          Size="{StaticResource IconSize}"/>
 
         <FontImageSource x:Key="IconDelete"
@@ -99,23 +99,12 @@
                          FontFamily="{x:Static f:FluentUI.FontFamily}"
                          Color="{toolkit:AppThemeResource OnBackground}"
                          Size="{StaticResource size240}"/>
+
         <FontImageSource x:Key="IconDark"
                          Glyph="{x:Static f:FluentUI.weather_moon_28_regular}"
                          FontFamily="{x:Static f:FluentUI.FontFamily}"
                          Color="{toolkit:AppThemeResource OnBackground}"
                          Size="{StaticResource size240}"/>
-
-        <FontImageSource x:Key="IconSettings"
-                         Glyph="{x:Static f:FluentUI.bot_24_regular}"
-                         FontFamily="{x:Static f:FluentUI.FontFamily}"
-                         Color="{toolkit:AppThemeResource OnBackground}"
-                         Size="{StaticResource IconSize}"/>
-
-        <FontImageSource x:Key="IconSettingsEnabled"
-                         Glyph="{x:Static f:FluentUI.bot_sparkle_24_regular}"
-                         FontFamily="{x:Static f:FluentUI.FontFamily}"
-                         Color="#8855FF"
-                         Size="{StaticResource IconSize}"/>
 
         <toolkit:AppThemeObject x:Key="IconMicrophone"
                                 Light="{FontImageSource 
@@ -132,13 +121,13 @@
         <FontImageSource x:Key="IconKeyboard"
                          Glyph="{x:Static f:FluentUI.keyboard_24_regular}"
                          FontFamily="{x:Static f:FluentUI.FontFamily}"
-                         Color="#F2E8C4"
+                         Color="{toolkit:AppThemeResource OnPrimary}"
                          Size="{StaticResource IconSize}"/>
 
         <FontImageSource x:Key="IconCamera"
                          Glyph="{x:Static f:FluentUI.camera_28_regular}"
                          FontFamily="{x:Static f:FluentUI.FontFamily}"
-                         Color="#F2E8C4"
+                         Color="{toolkit:AppThemeResource OnPrimary}"
                          Size="{StaticResource IconSize}"/>
 
         <Style TargetType="Page"
@@ -172,7 +161,7 @@
                 <Setter Property="Shell.TabBarUnselectedColor"
                                 Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}"/>
                 <Setter Property="Shell.FlyoutBackground"
-                                Value="{toolkit:AppThemeResource Background}"/>
+                                Value="{toolkit:AppThemeResource Surface0}"/>
         </Style>
 
         <Style TargetType="Label"
@@ -332,7 +321,7 @@
                 <Setter Property="StrokeShape"
                                 Value="RoundRectangle 20"/>
                 <Setter Property="Background"
-                                Value="{toolkit:AppThemeResource Surface1}"/>
+                                Value="{toolkit:AppThemeResource Surface0}"/>
                 <Setter Property="StrokeThickness"
                                 Value="0"/>
                 <Setter Property="Padding"
@@ -344,7 +333,7 @@
                 <Setter Property="StrokeShape"
                                 Value="RoundRectangle 20"/>
                 <Setter Property="Background"
-                                Value="{toolkit:AppThemeResource Surface1}"/>
+                                Value="{toolkit:AppThemeResource Surface0}"/>
                 <Setter Property="StrokeThickness"
                                 Value="0"/>
                 <Setter Property="Padding"

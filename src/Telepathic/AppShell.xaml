@@ -35,7 +35,7 @@
 
     <Shell.FlyoutHeader>
         <Grid HorizontalOptions="Fill" VerticalOptions="Start">
-            <Image Source="{AppThemeBinding Light=flyoutheader_light.png, Dark=flyoutheader_dark.png}" 
+            <Image Source="{AppThemeBinding Light=flyoutheader.png, Dark=flyoutheader.png}" 
                 VerticalOptions="Start" 
                 HorizontalOptions="Fill"
                 Aspect="AspectFit"  />
@@ -50,8 +50,8 @@
                 SegmentWidth="40" SegmentHeight="40">                
                 <sf:SfSegmentedControl.ItemsSource>
                     <x:Array Type="{x:Type sf:SfSegmentItem}">
-                        <sf:SfSegmentItem ImageSource="{StaticResource IconLight}" SelectedSegmentBackground="{toolkit:AppThemeResource Primary}"/>
-                        <sf:SfSegmentItem ImageSource="{StaticResource IconDark}" SelectedSegmentBackground="{toolkit:AppThemeResource Primary}"/>
+                        <sf:SfSegmentItem ImageSource="{StaticResource IconLight}" SelectedSegmentBackground="{toolkit:AppThemeResource Quaternary}"/>
+                        <sf:SfSegmentItem ImageSource="{StaticResource IconDark}" SelectedSegmentBackground="{toolkit:AppThemeResource Tertiary}"/>
                     </x:Array>
                 </sf:SfSegmentedControl.ItemsSource>
             </sf:SfSegmentedControl>
