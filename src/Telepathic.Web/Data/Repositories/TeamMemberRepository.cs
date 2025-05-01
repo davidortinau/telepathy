@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using Telepathic.Shared.Models;
+using Telepathic.Web.Models;
 
 namespace Telepathic.Web.Data.Repositories;
 
@@ -17,20 +17,29 @@ public class TeamMemberRepository : IRepository<TeamMember>
     {
         return _context.TeamMembers
             .Include(t => t.Projects)
+            .ThenInclude(p => p.ProjectTasks)
             .ToList();
     }
 
     public async Task<IEnumerable<TeamMember>> GetAllAsync()
     {
         return await _context.TeamMembers
-            .Include(t => t.Projects)
-            .ToListAsync();
+          .Include(t => t.Projects)
+          .ThenInclude(p => p.ProjectTasks)
+          .ToListAsync();
+        //return await _context.TeamMembers            
+        //    .Include(t => t.Projects)
+        //        .ThenInclude(p => p.Category)
+        //    .Include(t => t.Projects)
+        //        .ThenInclude(p => p.ProjectTasks)
+        //    .ToListAsync();
     }
 
     public TeamMember? GetById(int id)
     {
         return _context.TeamMembers
             .Include(t => t.Projects)
+            .ThenInclude(t => t.ProjectTasks)
             .FirstOrDefault(t => t.ID == id);
     }
 

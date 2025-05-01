@@ -1,16 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using Telepathic.Shared.Services;
+using Telepathic.Web.Models;
 using Telepathic.Shared.Models;
 using Telepathic.Web.Components;
 using Telepathic.Web.Data;
 using Telepathic.Web.Data.Repositories;
 using Telepathic.Web.Services;
+using Syncfusion.Blazor;
+
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8 / V1NNaF5cWWNCe0x1RHxbf1x1ZFRHallYTnJbUiweQnxTdEBjXH9fcXdXQWVVVkdxXklfag ==");
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+
+builder.Services.AddSyncfusionBlazor();
 
 // Configure EF Core with SQL Server
 builder.Services.AddDbContext<TelepathicDbContext>(options =>
@@ -62,5 +69,22 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred while initializing the database");
     }
 }
+
+//Map minimal APIs to expose data to the client-side MAUI app
+app.MapGet("/api/teamtaskload", async (ITeamDataService teamDataService) =>
+{
+    var teamTaskLoad = await teamDataService.GetTeamTaskLoadAsync();
+    return Results.Ok(teamTaskLoad);
+});
+app.MapGet("/api/categorytaskload", async (ITeamDataService teamDataService) =>
+{
+    var categoryTaskLoad = await teamDataService.GetCategoryTaskLoadAsync();
+    return Results.Ok(categoryTaskLoad);
+});
+app.MapGet("/api/tasksdue", async (ITeamDataService teamDataService) =>
+{
+    var tasksDue = await teamDataService.GetTasksDueAsync();
+    return Results.Ok(tasksDue);
+});
 
 app.Run();

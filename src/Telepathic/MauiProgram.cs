@@ -7,13 +7,16 @@ using Plugin.Maui.CalendarStore;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using Telepathic.Shared.Services;
+using Syncfusion.Blazor;
 
 namespace Telepathic;
 
 public static class MauiProgram
-{
+{   
 	public static MauiApp CreateMauiApp()
 	{
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8 / V1NNaF5cWWNCe0x1RHxbf1x1ZFRHallYTnJbUiweQnxTdEBjXH9fcXdXQWVVVkdxXklfag ==");
+        
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
@@ -51,6 +54,7 @@ public static class MauiProgram
 			});
 
         builder.Services.AddMauiBlazorWebView();
+		builder.Services.AddSyncfusionBlazor();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

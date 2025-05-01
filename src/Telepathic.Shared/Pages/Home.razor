@@ -1,5 +1,8 @@
 ﻿@page "/"
 @using Telepathic.Shared.Services
+@using Telepathic.Shared.Models
+@using Syncfusion.Blazor.Charts
+@inject NavigationManager NavigationManager
 @inject IFormFactor FormFactor
 @inject ITeamDataService TeamDataService
 
@@ -7,11 +10,83 @@
 
 <h1>Team Task Insights</h1>
 
-Welcome to your new app running on <em>@factor</em> using <em>@platform</em>.
+Welcome! You are running on <em>@factor</em> using <em>@platform</em>.
 
-<p>This is where we will put a beautiful dashboard to show team stats. It's the same Blazor component the Mobile and Web apps use.</p>
+<div class="control-section" align='center'>
+    <div class="control-section">
+        <SfAccumulationChart Title="Team Task Load">
+            <AccumulationChartSeriesCollection>
+                <AccumulationChartSeries DataSource="@teamTaskLoad" XName="Name" YName="TaskCount"
+                                         Name="TaskCount" StartAngle="@StartAngle"
+                                         InnerRadius="0%" ExplodeIndex="2" Explode="true" ExplodeOffset="@ExplodeRadius">
+                    <AccumulationDataLabelSettings Visible="true" Name="DataLabelMappingName" Position="AccumulationLabelPosition.Outside">
+                        <AccumulationChartDataLabelFont Size=@Size FontWeight="600"></AccumulationChartDataLabelFont>
+                        <AccumulationChartConnector Length=@ConnectorLength Type="ConnectorType.Curve"></AccumulationChartConnector>
+                    </AccumulationDataLabelSettings>
+                </AccumulationChartSeries>
+            </AccumulationChartSeriesCollection>
+            <AccumulationChartLegendSettings Visible="true"></AccumulationChartLegendSettings>
+        </SfAccumulationChart>         
+    </div>   
+</div>
+<div class="control-section" align='center'>
+    <div class="control-section">
+        <SfChart Title="Tasks Due by Date">
+            <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.DateTimeCategory"></ChartPrimaryXAxis>
+            <ChartPrimaryYAxis Title="Task Count" LabelFormat="{value}" Interval="1" RangePadding="ChartRangePadding.Round"></ChartPrimaryYAxis>
+            <ChartLegendSettings EnableHighlight="true"></ChartLegendSettings>
+            <ChartSeriesCollection>
+                <ChartSeries DataSource="@tasksDue" Name="ToDo" Fill="Purple" XName="DueDate" YName="TaskCount" Type="ChartSeriesType.StackingColumn">
+                    <ChartMarker Visible="true">
+                    </ChartMarker>
+                </ChartSeries>
+              <ChartSeries DataSource="@tasksDue" Name="Completed" Fill="Green" XName="DueDate" YName="CompletedCount" Type="ChartSeriesType.StackingColumn">
+                    <ChartMarker Visible="true">
+                    </ChartMarker>
+                </ChartSeries>
+            </ChartSeriesCollection>
+        </SfChart>
+    </div>
+</div>
+<div class="control-section" align='center'>
+    <div class="control-section">
+        <SfAccumulationChart Title="Tasks by Category">
+            <AccumulationChartSeriesCollection>
+                <AccumulationChartSeries DataSource="@categoryTaskLoad" XName="Title" YName="TaskCount"
+                                         Name="TaskCount" StartAngle="@StartAngle"
+                                         InnerRadius="0%" ExplodeIndex="1" Explode="true" ExplodeOffset="@ExplodeRadius">
+                    <AccumulationDataLabelSettings Visible="true" Name="DataLabelMappingName" Position="AccumulationLabelPosition.Outside">
+                        <AccumulationChartDataLabelFont Size=@Size FontWeight="600"></AccumulationChartDataLabelFont>
+                        <AccumulationChartConnector Length=@ConnectorLength Type="ConnectorType.Curve"></AccumulationChartConnector>
+                    </AccumulationDataLabelSettings>
+                </AccumulationChartSeries>
+            </AccumulationChartSeriesCollection>
+            <AccumulationChartLegendSettings Visible="true"></AccumulationChartLegendSettings>
+        </SfAccumulationChart>
+    </div>
+</div>
+
 
 @code {
     private string factor => FormFactor.GetFormFactor();
     private string platform => FormFactor.GetPlatform();
+
+    public int ExplodeIndex { get; set; } = 1;
+    public string ExplodeRadius = "10%";
+    public string Radius { get; set; } = "60%";
+    public string ConnectorLength { get; set; } = "20px";
+    public int StartAngle = 30;
+    public string Size { get; set; } = "12px";
+    public int i = 0;    
+
+    private IEnumerable<TeamTaskLoad> teamTaskLoad = new List<TeamTaskLoad>();
+    private IEnumerable<CategoryTaskLoad> categoryTaskLoad = new List<CategoryTaskLoad>();
+    private IEnumerable<TasksDue> tasksDue = new List<TasksDue>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        teamTaskLoad = await TeamDataService.GetTeamTaskLoadAsync();
+        categoryTaskLoad = await TeamDataService.GetCategoryTaskLoadAsync();
+        tasksDue = await TeamDataService.GetTasksDueAsync();
+    }   
 }
