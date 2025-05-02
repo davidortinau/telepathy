@@ -13,55 +13,69 @@
 Welcome! You are running on <em>@factor</em> using <em>@platform</em>.
 <hr />
 
-<div class="control-section" align="center">
-    <SfAccumulationChart Title="Team Task Load" Width="95%" EnableAnimation="true">
-        <AccumulationChartTooltipSettings Header="" Format="<b>${point.x}</b><br>Tasks: <b>${point.y}</b>" Enable="true" EnableHighlight="true" />
-        <AccumulationChartSeriesCollection>
-            <AccumulationChartSeries DataSource="@teamTaskLoad" XName="Name" YName="TaskCount"
-                                        Name="TaskCount" StartAngle="@StartAngle"
-                                        InnerRadius="0%" ExplodeIndex="2" Explode="true" ExplodeOffset="@ExplodeRadius">
-                <AccumulationDataLabelSettings Visible="true" Name="DataLabelMappingName" Position="AccumulationLabelPosition.Outside">
-                    <AccumulationChartDataLabelFont Size=@Size FontWeight="600"></AccumulationChartDataLabelFont>
-                    <AccumulationChartConnector Length=@ConnectorLength Type="ConnectorType.Curve"></AccumulationChartConnector>
-                </AccumulationDataLabelSettings>
-            </AccumulationChartSeries>
-        </AccumulationChartSeriesCollection>
-        <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Center" Position="LegendPosition.Bottom"  ></AccumulationChartLegendSettings>
-    </SfAccumulationChart>         
-</div>      
-<div class="control-section" align="center">
-    <SfChart Title="Tasks Due by Date" EnableAnimation="true">
-        <ChartTooltipSettings Enable="true" Header="<b>${point.x}</b>" Format="${series.name}: <b>${point.y}</b>" EnableHighlight="true" />
-        <ChartTitleStyle TextOverflow="TextOverflow.Wrap"></ChartTitleStyle>
-        <ChartSubTitleStyle TextOverflow="TextOverflow.Wrap"></ChartSubTitleStyle>
-        <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
-        <ChartPrimaryXAxis Interval="2" ValueType="Syncfusion.Blazor.Charts.ValueType.DateTimeCategory"></ChartPrimaryXAxis>
-        <ChartPrimaryYAxis Interval="1" ></ChartPrimaryYAxis>
-        <ChartLegendSettings EnableHighlight="true"></ChartLegendSettings>
-        <ChartSeriesCollection>
-            <ChartSeries DataSource="@tasksDue" Name="ToDo" Fill="#a16ee5" XName="DueDate" YName="TaskCount" Type="ChartSeriesType.StackingColumn">
-            </ChartSeries>
-            <ChartSeries DataSource="@tasksDue" Name="Completed" Fill="#7ddf1e" XName="DueDate" YName="CompletedCount" Type="ChartSeriesType.StackingColumn">
-            </ChartSeries>
-        </ChartSeriesCollection>
-    </SfChart>
-</div>
-<div class="control-section" align="center">
-    <SfAccumulationChart Title="Tasks by Category" Width="95%" EnableAnimation="true">
-        <AccumulationChartTooltipSettings Header="" Format="<b>${point.x}</b><br>Tasks: <b>${point.y}</b>" Enable="true" EnableHighlight="true" /> 
-        <AccumulationChartSeriesCollection>
-            <AccumulationChartSeries DataSource="@categoryTaskLoad" XName="Title" YName="TaskCount"
-                                        Name="TaskCount" StartAngle="@StartAngle"
-                                        InnerRadius="0%" ExplodeIndex="1" Explode="true" ExplodeOffset="@ExplodeRadius">
-                <AccumulationDataLabelSettings Visible="true" Name="DataLabelMappingName" Position="AccumulationLabelPosition.Outside">
-                    <AccumulationChartDataLabelFont Size=@Size FontWeight="600"></AccumulationChartDataLabelFont>
-                    <AccumulationChartConnector Length=@ConnectorLength Type="ConnectorType.Curve"></AccumulationChartConnector>
-                </AccumulationDataLabelSettings>
-            </AccumulationChartSeries>
-        </AccumulationChartSeriesCollection>
-        <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Center" Position="LegendPosition.Bottom"></AccumulationChartLegendSettings>
-    </SfAccumulationChart>
-</div>
+@if (tasksDue == null || tasksDue.Count() == 0 || 
+    teamTaskLoad == null || teamTaskLoad.Count() == 0 ||  
+    categoryTaskLoad == null || categoryTaskLoad.Count() == 0 )
+{
+    <div class="container d-flex justify-content-center align-items-center" >
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else
+{
+
+    <div class="control-section" align="center">
+        <SfAccumulationChart Title="Team Task Load" Width="95%" EnableAnimation="true">
+            <AccumulationChartTooltipSettings Header="" Format="<b>${point.x}</b><br>Tasks: <b>${point.y}</b>" Enable="true" EnableHighlight="true" />
+            <AccumulationChartSeriesCollection>
+                <AccumulationChartSeries DataSource="@teamTaskLoad" XName="Name" YName="TaskCount"
+                Name="TaskCount" StartAngle="@StartAngle"
+                InnerRadius="0%" ExplodeIndex="2" Explode="true" ExplodeOffset="@ExplodeRadius">
+                    <AccumulationDataLabelSettings Visible="true" Name="DataLabelMappingName" Position="AccumulationLabelPosition.Outside">
+                        <AccumulationChartDataLabelFont Size=@Size FontWeight="600"></AccumulationChartDataLabelFont>
+                        <AccumulationChartConnector Length=@ConnectorLength Type="ConnectorType.Curve"></AccumulationChartConnector>
+                    </AccumulationDataLabelSettings>
+                </AccumulationChartSeries>
+            </AccumulationChartSeriesCollection>
+            <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Near" Position="LegendPosition.Top"  ></AccumulationChartLegendSettings>
+        </SfAccumulationChart>         
+    </div>      
+    <div class="control-section" align="center">
+        <SfChart Title="Tasks Due by Date" EnableAnimation="true">
+            <ChartTooltipSettings Enable="true" Header="" Format="${series.name}: <b>${point.y}</b>" EnableHighlight="true" />
+            <ChartTitleStyle TextOverflow="TextOverflow.Wrap"></ChartTitleStyle>
+            <ChartSubTitleStyle TextOverflow="TextOverflow.Wrap"></ChartSubTitleStyle>
+            <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+            <ChartPrimaryXAxis Interval="2" ValueType="Syncfusion.Blazor.Charts.ValueType.DateTimeCategory"></ChartPrimaryXAxis>
+            <ChartPrimaryYAxis Interval="1" ></ChartPrimaryYAxis>
+            <ChartLegendSettings EnableHighlight="true"></ChartLegendSettings>
+            <ChartSeriesCollection>
+                <ChartSeries DataSource="@tasksDue" Name="ToDo" Fill="#a16ee5" XName="DueDate" YName="TaskCount" Type="ChartSeriesType.StackingColumn">
+                </ChartSeries>
+                <ChartSeries DataSource="@tasksDue" Name="Completed" Fill="#7ddf1e" XName="DueDate" YName="CompletedCount" Type="ChartSeriesType.StackingColumn">
+                </ChartSeries>
+            </ChartSeriesCollection>
+        </SfChart>
+    </div>
+    <div class="control-section" align="center">
+        <SfAccumulationChart Title="Tasks by Category" Width="95%" EnableAnimation="true">
+            <AccumulationChartTooltipSettings Header="" Format="<b>${point.x}</b><br>Tasks: <b>${point.y}</b>" Enable="true" EnableHighlight="true" /> 
+            <AccumulationChartSeriesCollection>
+                <AccumulationChartSeries DataSource="@categoryTaskLoad" XName="Title" YName="TaskCount"
+                Name="TaskCount" StartAngle="@StartAngle"
+                InnerRadius="0%" ExplodeIndex="1" Explode="true" ExplodeOffset="@ExplodeRadius">
+                    <AccumulationDataLabelSettings Visible="true" Name="DataLabelMappingName" Position="AccumulationLabelPosition.Outside">
+                        <AccumulationChartDataLabelFont Size=@Size FontWeight="600"></AccumulationChartDataLabelFont>
+                        <AccumulationChartConnector Length=@ConnectorLength Type="ConnectorType.Curve"></AccumulationChartConnector>
+                    </AccumulationDataLabelSettings>
+                </AccumulationChartSeries>
+            </AccumulationChartSeriesCollection>
+            <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Center" Position="LegendPosition.Bottom"></AccumulationChartLegendSettings>
+        </SfAccumulationChart>
+    </div>
+}
 
 @code {
     private string factor => FormFactor.GetFormFactor();
@@ -72,12 +86,12 @@ Welcome! You are running on <em>@factor</em> using <em>@platform</em>.
     public string Radius { get; set; } = "60%";
     public string ConnectorLength { get; set; } = "20px";
     public int StartAngle = 30;
-    public string Size { get; set; } = "12px";
-    public int i = 0;    
+    public string Size { get; set; } = "10px";
+    public int i = 0;
 
-    private IEnumerable<TeamTaskLoad> teamTaskLoad = new List<TeamTaskLoad>();
-    private IEnumerable<CategoryTaskLoad> categoryTaskLoad = new List<CategoryTaskLoad>();
-    private IEnumerable<TasksDue> tasksDue = new List<TasksDue>();
+    private IEnumerable<TeamTaskLoad>? teamTaskLoad;
+    private IEnumerable<CategoryTaskLoad>? categoryTaskLoad;
+    private IEnumerable<TasksDue>? tasksDue;
 
     protected override async Task OnInitializedAsync()
     {
