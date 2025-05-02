@@ -2,7 +2,6 @@
 using Telepathic.Shared.Models;
 using Telepathic.Web.Models;
 using Telepathic.Web.Data.Repositories;
-using Microsoft.VisualBasic;
 
 namespace Telepathic.Web.Services;
 
@@ -13,6 +12,9 @@ public class TeamDataService : ITeamDataService
     private readonly IRepository<Project> _projectRepository;
     private readonly IRepository<ProjectTask> _projectTaskRepository;
     private readonly IRepository<Category> _categoryRepository;
+    private List<TeamTaskLoad> _teamTaskLoad = new();
+    private List<CategoryTaskLoad> _categoryTaskLoad = new();
+    private List<TasksDue> _tasksDue = new();
 
     public TeamDataService(
         IRepository<TeamMember> teamMemberRepository,
@@ -28,73 +30,76 @@ public class TeamDataService : ITeamDataService
 
     public async Task<IEnumerable<TeamTaskLoad>> GetTeamTaskLoadAsync()
     {
-        var team = await _teamMemberRepository.GetAllAsync();
-        var teamTaskLoad = new List<TeamTaskLoad>();
-
-        foreach (var member in team)
+        if (_teamTaskLoad.Count == 0)
         {
-            var count = 0;
-            foreach (var project in member.Projects)
+            var team = await _teamMemberRepository.GetAllAsync();
+
+            foreach (var member in team)
             {
-                //count += project.ProjectTasks.Count(t => !t.IsCompleted);
-                count += project.ProjectTasks.Count();
+                var count = 0;
+                foreach (var project in member.Projects)
+                {
+                    count += project.ProjectTasks.Count();
+                }
+                _teamTaskLoad.Add(new TeamTaskLoad
+                {
+                    Name = member.Name,
+                    TaskCount = count
+                });
             }
-            teamTaskLoad.Add(new TeamTaskLoad
-            {
-                Name = member.Name,
-                TaskCount = count
-            });
         }
-        return teamTaskLoad;
+        return _teamTaskLoad;
     }
 
     public async Task<IEnumerable<CategoryTaskLoad>> GetCategoryTaskLoadAsync()
-    {
-        var categories = await _categoryRepository.GetAllAsync();
-        var categoryTasks = new List<CategoryTaskLoad>();
-
-        foreach (var category in categories)
+    {       
+        if (_categoryTaskLoad.Count == 0)
         {
-            var count = 0;
-            var projects = await _projectRepository.FindAsync(c=> c.CategoryID == category.ID);
+            var categories = await _categoryRepository.GetAllAsync();
+            foreach (var category in categories)
+            {
+                var count = 0;
+                var projects = await _projectRepository.FindAsync(c=> c.CategoryID == category.ID);
             
-            foreach (var project in projects)
-            {
-                //count += project.ProjectTasks.Count(t => !t.IsCompleted);
-                count += project.ProjectTasks.Count();
+                foreach (var project in projects)
+                {
+                    count += project.ProjectTasks.Count();
+                }
+                _categoryTaskLoad.Add(new CategoryTaskLoad
+                {
+                    Title = category.Title,
+                    Color = category.Color,
+                    TaskCount = count
+                });
             }
-            categoryTasks.Add(new CategoryTaskLoad
-            {
-                Title = category.Title,
-                Color = category.Color,
-                TaskCount = count
-            });
         }
-        return categoryTasks;
+        return _categoryTaskLoad;
     }
 
     public async Task<IEnumerable<TasksDue>> GetTasksDueAsync()
     {
-        var tasks = await _projectTaskRepository.GetAllAsync();
-        var tasksDue = new List<TasksDue>();
-        var completedTasks = tasks.Where(t => t.IsCompleted).ToList();
-        var orderedTasks = tasks.OrderBy(t => t.DueDate).ToList();
-
-        var uniqueDates = tasks.Select(t => t.DueDate?.Date).OrderBy(t => t).Distinct().ToList();
-
-        foreach (var date in uniqueDates)
+        if (_tasksDue.Count == 0)
         {
-            var tasksOnDate = orderedTasks.Where(t => t.DueDate?.Date == date).ToList();
-            if (tasksOnDate.Any())
-            {             
-                tasksDue.Add(new TasksDue
-                {
-                    DueDate = date,
-                    CompletedCount = completedTasks.Count(d => d.DueDate?.Date == date?.Date),
-                    TaskCount = tasks.Count(t => t.DueDate?.Date == date?.Date),
-                });
+            var tasks = await _projectTaskRepository.GetAllAsync();
+            var completedTasks = tasks.Where(t => t.IsCompleted).ToList();
+            var orderedTasks = tasks.OrderBy(t => t.DueDate).ToList();
+
+            var uniqueDates = tasks.Select(t => t.DueDate?.Date).OrderBy(t => t).Distinct().ToList();
+
+            foreach (var date in uniqueDates)
+            {
+                var tasksOnDate = orderedTasks.Where(t => t.DueDate?.Date == date).ToList();
+                if (tasksOnDate.Any())
+                {             
+                    _tasksDue.Add(new TasksDue
+                    {
+                        DueDate = date,
+                        CompletedCount = completedTasks.Count(d => d.DueDate?.Date == date?.Date),
+                        TaskCount = tasks.Count(t => t.DueDate?.Date == date?.Date),
+                    });
+                }
             }
         }
-        return tasksDue;
+        return _tasksDue;
     }
 }   
