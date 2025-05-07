@@ -8,6 +8,8 @@ public partial class AppShell : Shell
 	public AppShell()
 	{
 		InitializeComponent();
+		// Set default theme to light mode
+		Application.Current!.UserAppTheme = AppTheme.Light;
 		var currentTheme = Application.Current!.UserAppTheme;
 		ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
 	}
