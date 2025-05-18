@@ -15,7 +15,7 @@ public static class MauiProgram
 {   
 	public static MauiApp CreateMauiApp()
 	{
-        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("REDACTED_SECRET");
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Shared.Utilities.SFKey.GetSFKeyValue());
         
 		var builder = MauiApp.CreateBuilder();
 		builder

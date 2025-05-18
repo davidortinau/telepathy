@@ -8,7 +8,7 @@ using Telepathic.Web.Data.Repositories;
 using Telepathic.Web.Services;
 using Syncfusion.Blazor;
 
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("REDACTED_SECRET");
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Telepathic.Shared.Utilities.SFKey.GetSFKeyValue());
 
 var builder = WebApplication.CreateBuilder(args);
 
