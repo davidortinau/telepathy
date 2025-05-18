@@ -8,7 +8,7 @@ using Telepathic.Web.Data.Repositories;
 using Telepathic.Web.Services;
 using Syncfusion.Blazor;
 
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8 / V1NNaF5cWWNCe0x1RHxbf1x1ZFRHallYTnJbUiweQnxTdEBjXH9fcXdXQWVVVkdxXklfag ==");
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Telepathic.Shared.Utilities.SFKey.GetSFKeyValue());
 
 var builder = WebApplication.CreateBuilder(args);
 
