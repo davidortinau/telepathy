@@ -11,6 +11,7 @@ public partial class MainPage : ContentPage
 	
 	public MainPage(MainPageModel model)
 	{
+		Console.WriteLine("BEEP");
 		InitializeComponent();
 		BindingContext = model;
 		

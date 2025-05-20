@@ -8,6 +8,8 @@ using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using Telepathic.Shared.Services;
 using Syncfusion.Blazor;
+using Microsoft.Extensions.Hosting;
+using System.Diagnostics;
 
 namespace Telepathic;
 
@@ -52,6 +54,8 @@ public static class MauiProgram
 				fonts.AddFont("SegoeUI-Semibold.ttf", "SegoeSemibold");
 				fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
 			});
+
+		builder.AddServiceDefaults();
 
         builder.Services.AddMauiBlazorWebView();
 		builder.Services.AddSyncfusionBlazor();

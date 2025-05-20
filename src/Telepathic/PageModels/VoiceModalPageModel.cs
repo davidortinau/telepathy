@@ -98,7 +98,7 @@ public partial class VoiceModalPageModel : ObservableObject, IProjectTaskPageMod
                     {
                         _logger.LogWarning("Microphone permission denied");
                         // Permission denied - offer fallback
-                        bool navigateToManual = await Shell.Current.DisplayAlert(
+                        bool navigateToManual = await Shell.Current.DisplayAlertAsync(
                             "Microphone Access Denied",
                             "Voice recording requires microphone access. Would you like to enter tasks manually instead?",
                             "Enter Manually", "Cancel");
@@ -329,7 +329,7 @@ Here's the transcript: {Transcript}";
                 if (Projects.Count == 0)
                 {
                     _logger.LogWarning("No projects or tasks detected in transcript");
-                    await Shell.Current.DisplayAlert(
+                    await Shell.Current.DisplayAlertAsync(
                         "No Tasks Detected",
                         "No projects or tasks were detected in your voice memo. Would you like to try again?",
                         "OK");
@@ -479,7 +479,7 @@ Here's the transcript: {Transcript}";
             await Shell.Current.GoToAsync("..");
 
             // Notify the user that everything was saved
-            await Shell.Current.DisplayAlert("Success", "Your projects and tasks are save and secure.", "OK");
+            await Shell.Current.DisplayAlertAsync("Success", "Your projects and tasks are save and secure.", "OK");
         }
         catch (Exception ex)
         {

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Telepathic.Shared\Telepathic.Shared.csproj" />
+    <ProjectReference Include="..\Telepathic.WebServiceDefaults\Telepathic.WebServiceDefaults.csproj" />
   </ItemGroup>
   
   <!-- Add Entity Framework Core packages -->

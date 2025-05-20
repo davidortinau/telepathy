@@ -72,17 +72,17 @@ public partial class PhotoPage : ContentPage
         while (_isAnimating)
         {
             // Animate the scanner line moving from top to bottom
-            await ScannerLine.TranslateTo(0, containerHeight - ScannerLine.Height, 2000, Easing.Linear);
+            await ScannerLine.TranslateToAsync(0, containerHeight - ScannerLine.Height, 2000, Easing.Linear);
             
             if (!_isAnimating) break;
             
             // Animate the scanner line moving from bottom to top
-            await ScannerLine.TranslateTo(0, 0, 2000, Easing.Linear);
+            await ScannerLine.TranslateToAsync(0, 0, 2000, Easing.Linear);
             
             if (!_isAnimating) break;
         }
         
         // Reset position when stopped
-        await ScannerLine.TranslateTo(0, 0, 0);
+        await ScannerLine.TranslateToAsync(0, 0, 0);
     }
 }
