@@ -331,6 +331,7 @@
                     HeightRequest="60"
                     WidthRequest="60"
                     Command="{Binding TakePhotoCommand}"
+                    SemanticProperties.Description="Take photo"
                     Opacity="0"/>
 
             <Button x:Name="MicrophoneButton"
@@ -340,6 +341,7 @@
                     HeightRequest="60"
                     WidthRequest="60"
                     Command="{Binding VoiceRecordCommand}"
+                    SemanticProperties.Description="Record voice"
                     Opacity="0"/>
 
             <Button x:Name="KeyboardButton"
@@ -349,6 +351,7 @@
                     HeightRequest="60"
                     WidthRequest="60"
                     Opacity="0"
+                    SemanticProperties.Description="Enter text"
                     Command="{Binding AddTaskCommand}"/>
 
             <controls:AddButton x:Name="ActionToggleButton"
