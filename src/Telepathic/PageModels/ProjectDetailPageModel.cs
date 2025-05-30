@@ -107,14 +107,13 @@ public partial class ProjectDetailPageModel : ObservableObject, IQueryAttributab
 	{
 		// No longer triggers recommendations here
 	}
-
 	[RelayCommand]
 	private void NameUnfocused()
 	{
 		// Only trigger if new project and no tasks
 		if (_project != null && _project.IsNullOrNew() && !string.IsNullOrWhiteSpace(Name) && (Tasks == null || Tasks.Count == 0))
 		{
-			_ = GetRecommendationsAsync(Name);
+			GetRecommendationsAsync(Name).FireAndForgetSafeAsync(_errorHandler);
 		}
 	}
 

@@ -61,7 +61,7 @@ Only specify assistType different from None if you are confident about the detec
 ";
 
             var chatClient = _chatClientService.GetClient();
-            var response = await chatClient.GetResponseAsync<AssistAnalysisResult>(prompt);
+            var response = await chatClient.GetResponseAsync<AssistAnalysisResult>(prompt).ConfigureAwait(false);
 
             if (response?.Result != null)
             {

@@ -40,9 +40,9 @@ public partial class VoicePage : ContentPage
     private void StartRippleAnimations()
     {
         _isAnimating = true;
-        AnimateRipple(Ripple1, 0);
-        AnimateRipple(Ripple2, 500);
-        AnimateRipple(Ripple3, 1000);
+        AnimateRippleAsync(Ripple1, 0).FireAndForgetSafeAsync();
+        AnimateRippleAsync(Ripple2, 500).FireAndForgetSafeAsync();
+        AnimateRippleAsync(Ripple3, 1000).FireAndForgetSafeAsync();
     }
     
     private void StopRippleAnimations()
@@ -53,7 +53,7 @@ public partial class VoicePage : ContentPage
         Ripple3.Opacity = 0;
     }
     
-    private async void AnimateRipple(Ellipse ripple, int initialDelay)
+    private async Task AnimateRippleAsync(Ellipse ripple, int initialDelay)
     {
         await Task.Delay(initialDelay);
         

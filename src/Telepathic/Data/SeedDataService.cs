@@ -21,10 +21,9 @@ public class SeedDataService
 		_categoryRepository = categoryRepository;
 		_logger = logger;
 	}
-
 	public async Task LoadSeedDataAsync()
 	{
-		ClearTables();
+		await ClearTables();
 
 		await using Stream templateStream = await FileSystem.OpenAppPackageFileAsync(_seedDataFilePath);
 
@@ -82,8 +81,7 @@ public class SeedDataService
 			throw;
 		}
 	}
-
-	private async void ClearTables()
+	private async Task ClearTables()
 	{
 		try
 		{
