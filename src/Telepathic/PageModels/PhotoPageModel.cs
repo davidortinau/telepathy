@@ -188,7 +188,7 @@ public partial class PhotoPageModel : ObservableObject, IProjectTaskPageModel, I
                 throw new InvalidOperationException("Could not get chat client");
             }
 
-            byte[] imageBytes = File.ReadAllBytes(ImagePath);
+            byte[] imageBytes = await File.ReadAllBytesAsync(ImagePath);
             
             var msg = new Microsoft.Extensions.AI.ChatMessage(ChatRole.User,
             [
