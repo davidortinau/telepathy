@@ -64,24 +64,39 @@ public class ChatClientService : IChatClientService
     private readonly LocationTools _locationTools;
     private IList<object>? _cachedTools;
 
-    public ChatClientService(ILogger<ChatClientService> logger, LocationTools locationTools)
+    public ChatClientService(ILogger<ChatClientService> logger, LocationTools locationTools, ISecureApiKeyService secureApiKeyService)
     {
         _logger = logger;
         _locationTools = locationTools;
         
-        // Try to initialize from preferences if available
-        // Check for Foundry settings first (higher priority if both are configured)
-        var foundryEndpoint = Preferences.Default.Get("foundry_endpoint", string.Empty);
-        var foundryApiKey = Preferences.Default.Get("foundry_api_key", string.Empty);
-        var openAiApiKey = Preferences.Default.Get("openai_api_key", string.Empty);
-        
-        if (!string.IsNullOrEmpty(foundryEndpoint) && !string.IsNullOrEmpty(foundryApiKey))
+        // Load API keys from secure storage and initialize client asynchronously
+        _ = InitializeClientAsync(secureApiKeyService);
+    }
+
+    /// <summary>
+    /// Initializes the chat client asynchronously using secure storage
+    /// </summary>
+    private async Task InitializeClientAsync(ISecureApiKeyService secureApiKeyService)
+    {
+        try
         {
-            UpdateClient(foundryApiKey, "foundry", foundryEndpoint);
+            // Check for Foundry settings first (higher priority if both are configured)
+            var foundryEndpoint = Preferences.Default.Get("foundry_endpoint", string.Empty);
+            var foundryApiKey = await secureApiKeyService.GetApiKeyAsync("foundry_api_key");
+            var openAiApiKey = await secureApiKeyService.GetApiKeyAsync("openai_api_key");
+            
+            if (!string.IsNullOrEmpty(foundryEndpoint) && !string.IsNullOrEmpty(foundryApiKey))
+            {
+                UpdateClient(foundryApiKey, "foundry", foundryEndpoint);
+            }
+            else if (!string.IsNullOrEmpty(openAiApiKey))
+            {
+                UpdateClient(openAiApiKey);
+            }
         }
-        else if (!string.IsNullOrEmpty(openAiApiKey))
+        catch (Exception ex)
         {
-            UpdateClient(openAiApiKey);
+            _logger.LogError(ex, "Failed to initialize chat client from secure storage");
         }
     }
 

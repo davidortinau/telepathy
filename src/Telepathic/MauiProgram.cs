@@ -5,6 +5,7 @@ using Plugin.Maui.CalendarStore;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using Telepathic.Tools;
+using Telepathic.Services;
 
 namespace Telepathic;
 
@@ -62,6 +63,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<TagRepository>();
 		builder.Services.AddSingleton<SeedDataService>();
 		builder.Services.AddSingleton<ModalErrorHandler>();
+		builder.Services.AddSingleton<ISecureApiKeyService, SecureApiKeyService>();
 		builder.Services.AddSingleton<MainPageModel>();
 		builder.Services.AddSingleton<ProjectListPageModel>();
 		builder.Services.AddSingleton<ManageMetaPageModel>();		

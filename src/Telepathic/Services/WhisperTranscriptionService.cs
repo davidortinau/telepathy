@@ -1,13 +1,27 @@
 using Microsoft.Extensions.AI;
 using OpenAI;
+using Telepathic.Services;
 
 namespace Telepathic.Services;
 
 public class WhisperTranscriptionService : ITranscriptionService
-{        
+{
+    private readonly ISecureApiKeyService _secureApiKeyService;
+    
+    public WhisperTranscriptionService(ISecureApiKeyService secureApiKeyService)
+    {
+        _secureApiKeyService = secureApiKeyService;
+    }
+        
     public async Task<string> TranscribeAsync(string path, CancellationToken ct)
     {
-        var openAiApiKey = Preferences.Default.Get("openai_api_key", string.Empty);
+        var openAiApiKey = await _secureApiKeyService.GetApiKeyAsync("openai_api_key");
+        
+        if (string.IsNullOrEmpty(openAiApiKey))
+        {
+            throw new InvalidOperationException("OpenAI API key not found. Please configure your API key in settings.");
+        }
+        
         var client = new OpenAIClient(openAiApiKey);
         
         try
