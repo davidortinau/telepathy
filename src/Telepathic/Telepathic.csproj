@@ -52,7 +52,22 @@
 		<CodesignRequireProvisioningProfile>true</CodesignRequireProvisioningProfile>
 		<DisableCodesignVerification>true</DisableCodesignVerification>	
 	</PropertyGroup>
-	
+
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+		<CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
+		<CodesignEntitlements>Platforms\MacCatalyst\Entitlements.plist</CodesignEntitlements>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' AND '$(Configuration)' == 'Debug'">
+		<!--forces the simulator to pickup entitlements-->
+		<EnableCodeSigning>true</EnableCodeSigning>
+		<CodesignRequireProvisioningProfile>true</CodesignRequireProvisioningProfile>
+		<DisableCodesignVerification>true</DisableCodesignVerification>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#F04B25" />
