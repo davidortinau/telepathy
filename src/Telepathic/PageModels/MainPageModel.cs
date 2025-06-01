@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Telepathic.ViewModels;
 using Telepathic.Tools;
+using Telepathic.Services;
 
 namespace Telepathic.PageModels;
 
@@ -25,6 +26,7 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 	private readonly ILogger _logger;
 	private readonly TaskAssistHandler _taskAssistHandler;
 	private readonly LocationTools _locationTools;
+	private readonly ISecureApiKeyService _secureApiKeyService;
 	private CancellationTokenSource? _cancelTokenSource;
 	private DateTime _lastPriorityCheck = DateTime.MinValue;
 	private const int PRIORITY_CHECK_HOURS = 4;
@@ -77,15 +79,15 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 
 
 	[ObservableProperty]
-	private string _openAIApiKey = Preferences.Default.Get("openai_api_key", string.Empty);
+	private string _openAIApiKey = string.Empty;
 	[ObservableProperty]
-	private string _googlePlacesApiKey = Preferences.Default.Get("google_places_api_key", string.Empty);
+	private string _googlePlacesApiKey = string.Empty;
 
 	[ObservableProperty]
 	private string _foundryEndpoint = Preferences.Default.Get("foundry_endpoint", string.Empty);
 
 	[ObservableProperty]
-	private string _foundryApiKey = Preferences.Default.Get("foundry_api_key", string.Empty);
+	private string _foundryApiKey = string.Empty;
 
 	// Entry fields for UI binding
 	[ObservableProperty]
@@ -241,7 +243,7 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 	public MainPageModel(SeedDataService seedDataService, ProjectRepository projectRepository,
 	TaskRepository taskRepository, CategoryRepository categoryRepository, ModalErrorHandler errorHandler,
 	ICalendarStore calendarStore, ILogger<MainPageModel> logger, IChatClientService chatClientService,
-	TaskAssistHandler taskAssistHandler, LocationTools locationTools)
+	TaskAssistHandler taskAssistHandler, LocationTools locationTools, ISecureApiKeyService secureApiKeyService)
 	{
 		_projectRepository = projectRepository;
 		_taskRepository = taskRepository;
@@ -253,13 +255,10 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 		_logger = logger;
 		_taskAssistHandler = taskAssistHandler;
 		_locationTools = locationTools;
-		// Sync entry fields for UI
-		OpenAIApiKeyEntry = OpenAIApiKey;
-		GooglePlacesApiKeyEntry = GooglePlacesApiKey;
-		FoundryEndpointEntry = FoundryEndpoint;
-		FoundryApiKeyEntry = FoundryApiKey;
-
-		_locationTools.SetGooglePlacesApiKey(GooglePlacesApiKey);
+		_secureApiKeyService = secureApiKeyService;
+		
+		// Load API keys asynchronously
+		_ = LoadApiKeysAsync();
 
 		// Load saved calendar choices
 		LoadSavedCalendars();
@@ -268,6 +267,32 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 		if (IsLocationEnabled)
 		{
 			_ = GetCurrentLocationAsync();
+		}
+	}
+
+	/// <summary>
+	/// Loads API keys from secure storage asynchronously
+	/// </summary>
+	private async Task LoadApiKeysAsync()
+	{
+		try
+		{
+			OpenAIApiKey = await _secureApiKeyService.GetApiKeyAsync("openai_api_key");
+			GooglePlacesApiKey = await _secureApiKeyService.GetApiKeyAsync("google_places_api_key");
+			FoundryApiKey = await _secureApiKeyService.GetApiKeyAsync("foundry_api_key");
+			
+			// Sync entry fields for UI
+			OpenAIApiKeyEntry = OpenAIApiKey;
+			GooglePlacesApiKeyEntry = GooglePlacesApiKey;
+			FoundryEndpointEntry = FoundryEndpoint;
+			FoundryApiKeyEntry = FoundryApiKey;
+
+			_locationTools.SetGooglePlacesApiKey(GooglePlacesApiKey);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError(ex, "Failed to load API keys from secure storage");
+			// Continue with empty values - user will need to re-enter them
 		}
 	}
 
@@ -547,14 +572,14 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 	partial void OnOpenAIApiKeyChanged(string value)
 	{
 		_logger.LogInformation($"OpenAI API Key changed");
-		Preferences.Default.Set("openai_api_key", value);
+		_ = _secureApiKeyService.SetApiKeyAsync("openai_api_key", value);
 	}
 	partial void OnGooglePlacesApiKeyChanged(string value)
 	{
 		if (!string.IsNullOrWhiteSpace(value))
-			Preferences.Default.Set("google_places_api_key", value);
+			_ = _secureApiKeyService.SetApiKeyAsync("google_places_api_key", value);
 		else
-			Preferences.Default.Remove("google_places_api_key");
+			_ = _secureApiKeyService.RemoveApiKeyAsync("google_places_api_key");
 		_locationTools.SetGooglePlacesApiKey(value);
 	}
 
@@ -571,9 +596,9 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 	{
 		_logger.LogInformation($"Foundry API Key changed");
 		if (!string.IsNullOrWhiteSpace(value))
-			Preferences.Default.Set("foundry_api_key", value);
+			_ = _secureApiKeyService.SetApiKeyAsync("foundry_api_key", value);
 		else
-			Preferences.Default.Remove("foundry_api_key");
+			_ = _secureApiKeyService.RemoveApiKeyAsync("foundry_api_key");
 	}
 
 	partial void OnAboutMeTextChanged(string value)
@@ -597,12 +622,12 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 	{
 		_logger.LogInformation($"API Keys and settings saved");
 		
-		// Save all API keys and settings
-		Preferences.Default.Set("openai_api_key", OpenAIApiKey);
+		// Save all API keys securely and settings in preferences
+		await _secureApiKeyService.SetApiKeyAsync("openai_api_key", OpenAIApiKey);
 		if (!string.IsNullOrWhiteSpace(FoundryEndpoint))
 			Preferences.Default.Set("foundry_endpoint", FoundryEndpoint);
 		if (!string.IsNullOrWhiteSpace(FoundryApiKey))
-			Preferences.Default.Set("foundry_api_key", FoundryApiKey);
+			await _secureApiKeyService.SetApiKeyAsync("foundry_api_key", FoundryApiKey);
 
 		// Update the chat client with the new settings
 		try
