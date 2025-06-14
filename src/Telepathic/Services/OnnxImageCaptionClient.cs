@@ -66,6 +66,14 @@ public class OnnxImageCaptionClient : IImageCaptionClient, IDisposable
         try
         {
             var modelPath = $"Models/ImageCaptioning/{fileName}";
+            
+            // Check if this is a placeholder file
+            if (fileName.EndsWith(".placeholder"))
+            {
+                _logger.LogWarning("Model file {FileName} is a placeholder and not a real ONNX model", fileName);
+                return null;
+            }
+            
             var stream = await FileSystem.OpenAppPackageFileAsync(modelPath);
             stream.Close();
             
