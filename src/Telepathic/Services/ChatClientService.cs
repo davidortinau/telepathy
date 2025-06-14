@@ -33,6 +33,15 @@ public interface IChatClientService
     Task<ChatResponse<T>> GetResponseWithToolsAsync<T>(string prompt);
     
     /// <summary>
+    /// Gets a response from the chat client with image context
+    /// </summary>
+    /// <typeparam name="T">The type to deserialize the response to</typeparam>
+    /// <param name="prompt">The prompt to send to the chat client</param>
+    /// <param name="imagePath">Path to an image to include in the context</param>
+    /// <returns>The chat response</returns>
+    Task<ChatResponse<T>> GetResponseWithImageAsync<T>(string prompt, string imagePath);
+    
+    /// <summary>
     /// Updates the chat client with a new API key
     /// </summary>
     /// <param name="apiKey">The OpenAI API key</param>
@@ -62,12 +71,14 @@ public class ChatClientService : IChatClientService
     private IChatClient? _chatClient;
     private readonly ILogger _logger;
     private readonly LocationTools _locationTools;
+    private readonly IImageCaptionClient _imageCaptionClient;
     private IList<object>? _cachedTools;
 
-    public ChatClientService(ILogger<ChatClientService> logger, LocationTools locationTools)
+    public ChatClientService(ILogger<ChatClientService> logger, LocationTools locationTools, IImageCaptionClient imageCaptionClient)
     {
         _logger = logger;
         _locationTools = locationTools;
+        _imageCaptionClient = imageCaptionClient;
         
         // Try to initialize from preferences if available
         // Check for Foundry settings first (higher priority if both are configured)
@@ -131,6 +142,40 @@ public class ChatClientService : IChatClientService
         
         _logger.LogInformation("Calling chat client with location tools available");
         return await client.GetResponseAsync<T>(prompt, options);
+    }
+
+    /// <summary>
+    /// Gets a response from the chat client with image context
+    /// </summary>
+    public async Task<ChatResponse<T>> GetResponseWithImageAsync<T>(string prompt, string imagePath)
+    {
+        var client = GetClient();
+        
+        try
+        {
+            // Try to use local ONNX image captioning first
+            if (_imageCaptionClient.IsAvailable)
+            {
+                _logger.LogInformation("Using local ONNX model for image captioning");
+                var caption = await _imageCaptionClient.GenerateCaptionAsync(imagePath);
+                var enhancedPrompt = $"{prompt}\n\nImage Description: {caption}";
+                
+                var options = new ChatOptions();
+                return await client.GetResponseAsync<T>(enhancedPrompt, options);
+            }
+            else
+            {
+                _logger.LogInformation("Local ONNX image captioning not available, using original prompt");
+                var options = new ChatOptions();
+                return await client.GetResponseAsync<T>(prompt, options);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing image with ONNX model, falling back to text-only prompt");
+            var options = new ChatOptions();
+            return await client.GetResponseAsync<T>(prompt, options);
+        }
     }
 
     public void UpdateClient(string apiKey, string model = "gpt-4o-mini")
