@@ -67,6 +67,10 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+		
+		<!-- ONNX Models -->
+		<Content Include="Resources\Raw\Models\**\*.onnx" />
+		<Content Include="Resources\Raw\Models\**\*.json" />
 	</ItemGroup>
 
 
@@ -80,6 +84,9 @@
 		<PackageReference Include="Plugin.Maui.Audio" Version="3.1.1" />
 		<PackageReference Include="Plugin.Maui.CalendarStore" Version="4.0.0" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.0" />
+		<PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.19.2" />
+		<PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.19.2" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
 	</ItemGroup>
 
 	<ItemGroup>

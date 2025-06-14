@@ -66,7 +66,9 @@ public static class MauiProgram
 		builder.Services.AddSingleton<ProjectListPageModel>();
 		builder.Services.AddSingleton<ManageMetaPageModel>();		
 		builder.Services.AddSingleton<IAudioService, AudioService>();
-		builder.Services.AddSingleton<ITranscriptionService, WhisperTranscriptionService>();
+		builder.Services.AddSingleton<ILocalTranscriptionService, OnnxVoiceTranscriptionClient>();
+		builder.Services.AddSingleton<IImageCaptionClient, OnnxImageCaptionClient>();
+		builder.Services.AddSingleton<ITranscriptionService, HybridTranscriptionService>();
 		builder.Services.AddSingleton<IChatClientService, ChatClientService>();
 		builder.Services.AddSingleton<LocationTools>();
 		builder.Services.AddSingleton<TaskAssistAnalyzer>();

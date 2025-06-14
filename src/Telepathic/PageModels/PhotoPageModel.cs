@@ -182,21 +182,8 @@ public partial class PhotoPageModel : ObservableObject, IProjectTaskPageModel, I
             prompt.AppendLine("If no projects/tasks are found, return an empty projects array.");
             
             // Call the AI service with the image
-            var client = _chatClientService.GetClient();
-            if (client == null)
-            {
-                throw new InvalidOperationException("Could not get chat client");
-            }
-
-            byte[] imageBytes = File.ReadAllBytes(ImagePath);
-            
-            var msg = new Microsoft.Extensions.AI.ChatMessage(ChatRole.User,
-            [
-                new TextContent(prompt.ToString()),
-                new DataContent(imageBytes, mediaType: "image/png")
-            ]);
-            
-            var apiResponse = await client.GetResponseAsync<ProjectsJson>(msg);
+            // Use the new hybrid approach that prefers local ONNX image captioning
+            var apiResponse = await _chatClientService.GetResponseWithImageAsync<ProjectsJson>(prompt.ToString(), ImagePath);
             
             if (apiResponse?.Result?.Projects != null)
             {
