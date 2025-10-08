@@ -430,6 +430,31 @@
                         </sf:SfTextInputLayout>
 
                         <sf:SfTextInputLayout
+                          Hint="Azure Foundry Key">
+                            <Entry Text="{Binding FoundryApiKey, Mode=TwoWay}"
+                             Placeholder="Enter Foundry Key"
+                              IsPassword="True"/>
+                        </sf:SfTextInputLayout>
+
+                        <sf:SfTextInputLayout
+                            Hint="Azure Foundry Endpoint">
+                            <Entry Text="{Binding FoundryEndpoint, Mode=TwoWay}"
+                             Placeholder="Enter Foundry Endpoint"/>
+                        </sf:SfTextInputLayout>
+                        
+                        <sf:SfTextInputLayout
+                            Hint="Azure Foundry Model">
+                            <Entry Text="{Binding FoundryModel, Mode=TwoWay}"
+                             Placeholder="Enter Foundry Model"/>
+                        </sf:SfTextInputLayout>
+                        
+                        <sf:SfTextInputLayout
+                            Hint="Azure Foundry Deployment Name">
+                            <Entry Text="{Binding FoundryDeploymentName, Mode=TwoWay}"
+                             Placeholder="Enter Foundry Deployment Name"/>
+                        </sf:SfTextInputLayout>
+
+                        <sf:SfTextInputLayout
                             Hint="Google Places API Key">
                             <Entry Text="{Binding GooglePlacesApiKeyEntry, Mode=TwoWay}"
                                    Placeholder="Enter Google Places API Key"
@@ -480,6 +505,15 @@
                                     HeightRequest="100"
                                     Placeholder="Give me details to personalize your app experience."/>
                         </sf:SfTextInputLayout>
+
+                        <Button
+                             Text="Save Settings"
+                             Command="{Binding SaveApiKeyCommand}"
+                             HorizontalOptions="Center"
+                             Margin="0,24,0,0"
+                             BackgroundColor="{toolkit:AppThemeResource Primary}"
+                             TextColor="White"/>
+
 
                     </VerticalStackLayout>
                 </ScrollView>

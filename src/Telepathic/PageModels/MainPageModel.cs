@@ -87,8 +87,14 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 	[ObservableProperty]
 	private string _foundryApiKey = Preferences.Default.Get("foundry_api_key", string.Empty);
 
-	// Entry fields for UI binding
-	[ObservableProperty]
+    [ObservableProperty]
+    private string _foundryModel = Preferences.Default.Get("foundry_model", "o4-mini");
+
+    [ObservableProperty]
+    private string _foundryDeploymentName = Preferences.Default.Get("foundry_deployment_name", "o4-mini");
+
+    // Entry fields for UI binding
+    [ObservableProperty]
 	private string _openAIApiKeyEntry;
 	[ObservableProperty]
 	private string _googlePlacesApiKeyEntry;
@@ -99,7 +105,13 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 	[ObservableProperty]
 	private string _foundryApiKeyEntry;
 
-	[NotifyPropertyChangedFor(nameof(ShouldShowPriorityTasks))]
+    [ObservableProperty]
+    private string _foundryModelEntry;
+
+    [ObservableProperty]
+    private string _foundryDeploymentNameEntry;
+
+    [NotifyPropertyChangedFor(nameof(ShouldShowPriorityTasks))]
 	[ObservableProperty]
 	private bool _isTelepathyEnabled = Preferences.Default.Get("telepathy_enabled", false);
 
@@ -258,8 +270,10 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 		GooglePlacesApiKeyEntry = GooglePlacesApiKey;
 		FoundryEndpointEntry = FoundryEndpoint;
 		FoundryApiKeyEntry = FoundryApiKey;
+        FoundryModelEntry = FoundryModel;
+        FoundryDeploymentNameEntry = FoundryDeploymentName;
 
-		_locationTools.SetGooglePlacesApiKey(GooglePlacesApiKey);
+        _locationTools.SetGooglePlacesApiKey(GooglePlacesApiKey);
 
 		// Load saved calendar choices
 		LoadSavedCalendars();
@@ -290,10 +304,20 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 		FoundryApiKey = value;
 	}
 
-	/// <summary>
-	/// Retrieves calendar events for the connected calendars for today
-	/// </summary>
-	private async Task<List<CalendarEvent>> GetCalendarEventsAsync()
+    partial void OnFoundryModelEntryChanged(string value)
+    {
+        FoundryModel = value;
+    }
+
+    partial void OnFoundryDeploymentNameEntryChanged(string value)
+    {
+        FoundryDeploymentName = value;
+    }
+
+    /// <summary>
+    /// Retrieves calendar events for the connected calendars for today
+    /// </summary>
+    private async Task<List<CalendarEvent>> GetCalendarEventsAsync()
 	{
 		var results = new List<CalendarEvent>();
 
@@ -576,6 +600,24 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 			Preferences.Default.Remove("foundry_api_key");
 	}
 
+    partial void OnFoundryModelChanged(string value)
+    {
+        _logger.LogInformation($"Foundry Model changed");
+        if (!string.IsNullOrWhiteSpace(value))
+            Preferences.Default.Set("foundry_model", value);
+        else
+            Preferences.Default.Remove("foundry_model");
+    }
+
+    partial void OnFoundryDeploymentNameChanged(string value)
+    {
+        _logger.LogInformation($"Foundry Deployment Name changed");
+        if (!string.IsNullOrWhiteSpace(value))
+            Preferences.Default.Set("foundry_deployment_name", value);
+        else
+            Preferences.Default.Remove("foundry_deployment_name");
+    }
+
 	partial void OnAboutMeTextChanged(string value)
 	{
 		Preferences.Default.Set("about_me_text", value);
@@ -603,14 +645,18 @@ public partial class MainPageModel : ObservableObject, IProjectTaskPageModel
 			Preferences.Default.Set("foundry_endpoint", FoundryEndpoint);
 		if (!string.IsNullOrWhiteSpace(FoundryApiKey))
 			Preferences.Default.Set("foundry_api_key", FoundryApiKey);
+        if (!string.IsNullOrWhiteSpace(FoundryModel))
+            Preferences.Default.Set("foundry_model", FoundryModel);
+        if (!string.IsNullOrWhiteSpace(FoundryDeploymentName))
+            Preferences.Default.Set("foundry_deployment_name", FoundryDeploymentName);
 
-		// Update the chat client with the new settings
-		try
+        // Update the chat client with the new settings
+        try
 		{
 			// Determine which provider to use based on available settings
-			if (!string.IsNullOrWhiteSpace(FoundryEndpoint) && !string.IsNullOrWhiteSpace(FoundryApiKey))
+			if (!string.IsNullOrWhiteSpace(FoundryEndpoint) && !string.IsNullOrWhiteSpace(FoundryApiKey) && !string.IsNullOrWhiteSpace(FoundryModel) && !string.IsNullOrWhiteSpace(FoundryDeploymentName) )
 			{
-				_chatClientService.UpdateClient(FoundryApiKey, "foundry", FoundryEndpoint);
+				_chatClientService.UpdateClient(FoundryApiKey, "foundry", FoundryEndpoint, FoundryModel,FoundryDeploymentNameEntry);
 				await AppShell.DisplayToastAsync("Foundry settings saved and chat client updated!");
 			}
 			else if (!string.IsNullOrWhiteSpace(OpenAIApiKey))

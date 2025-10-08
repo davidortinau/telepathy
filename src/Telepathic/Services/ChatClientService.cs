@@ -36,9 +36,9 @@ public interface IChatClientService
     /// Updates the chat client with a new API key
     /// </summary>
     /// <param name="apiKey">The OpenAI API key</param>
-    /// <param name="model">The model to use (defaults to gpt-4o-mini)</param>
-    void UpdateClient(string apiKey, string model = "gpt-4o-mini");
-    
+    /// <param name="model">The model to use (defaults to o4-mini)</param>
+    void UpdateClient(string apiKey, string model = "o4-mini");
+
     /// <summary>
     /// Updates the chat client with provider-specific settings
     /// </summary>
@@ -46,7 +46,8 @@ public interface IChatClientService
     /// <param name="provider">The provider type (e.g., "openai", "foundry")</param>
     /// <param name="endpoint">The endpoint URL (required for foundry, optional for others)</param>
     /// <param name="model">The model to use</param>
-    void UpdateClient(string apiKey, string provider, string? endpoint = null, string model = "gpt-4o-mini");
+    /// <param name="deployment">The deployment name (for Azure OpenAI, if applicable)</param>
+    void UpdateClient(string apiKey, string provider, string? endpoint = null, string model = "o4-mini", string deployment= "o4-mini");
     
     /// <summary>
     /// Checks if the client is initialized and ready to use
@@ -73,11 +74,13 @@ public class ChatClientService : IChatClientService
         // Check for Foundry settings first (higher priority if both are configured)
         var foundryEndpoint = Preferences.Default.Get("foundry_endpoint", string.Empty);
         var foundryApiKey = Preferences.Default.Get("foundry_api_key", string.Empty);
+        var foundryModel = Preferences.Default.Get("foundry_model", "o4-mini");
+        var foundryDeploymentName = Preferences.Default.Get("foundry_deployment_name", "o4-mini");
         var openAiApiKey = Preferences.Default.Get("openai_api_key", string.Empty);
         
-        if (!string.IsNullOrEmpty(foundryEndpoint) && !string.IsNullOrEmpty(foundryApiKey))
+        if (!string.IsNullOrEmpty(foundryEndpoint) && !string.IsNullOrEmpty(foundryApiKey) && !string.IsNullOrEmpty(foundryDeploymentName) && !string.IsNullOrEmpty(foundryModel))
         {
-            UpdateClient(foundryApiKey, "foundry", foundryEndpoint);
+            UpdateClient(foundryApiKey, "foundry", foundryEndpoint, foundryModel, foundryDeploymentName);
         }
         else if (!string.IsNullOrEmpty(openAiApiKey))
         {
@@ -133,7 +136,7 @@ public class ChatClientService : IChatClientService
         return await client.GetResponseAsync<T>(prompt, options);
     }
 
-    public void UpdateClient(string apiKey, string model = "gpt-4o-mini")
+    public void UpdateClient(string apiKey, string model = "o4-mini")
     {
         if (string.IsNullOrEmpty(apiKey))
         {
@@ -171,7 +174,7 @@ public class ChatClientService : IChatClientService
         }
     }
 
-    public void UpdateClient(string apiKey, string provider, string? endpoint = null, string model = "gpt-4o")
+    public void UpdateClient(string apiKey, string provider, string? endpoint = null, string model = "o4-mini", string deployment = "o4-mini")
     {
         if (string.IsNullOrEmpty(apiKey))
         {
@@ -194,7 +197,7 @@ public class ChatClientService : IChatClientService
                     // For Foundry, create OpenAI client that points to the Foundry endpoint
                     // Most Foundry services are OpenAI-compatible
                     var foundryClient = new AzureOpenAIClient(new Uri(endpoint),new System.ClientModel.ApiKeyCredential(apiKey));
-                    _chatClient = foundryClient.GetChatClient("gpt-4o").AsIChatClient();
+                    _chatClient = foundryClient.GetChatClient(deployment).AsIChatClient();
                     break;
                     
                 case "openai":

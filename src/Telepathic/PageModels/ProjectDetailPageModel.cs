@@ -114,11 +114,11 @@ public partial class ProjectDetailPageModel : ObservableObject, IQueryAttributab
 		// Only trigger if new project and no tasks
 		if (_project != null && _project.IsNullOrNew() && !string.IsNullOrWhiteSpace(Name) && (Tasks == null || Tasks.Count == 0))
 		{
-			_ = GetRecommendationsAsync(Name);
+			_ = GetRecommendationsAsync(Name,Description);
 		}
 	}
 
-	private async Task GetRecommendationsAsync(string projectName)
+	private async Task GetRecommendationsAsync(string projectName, string projectDescription)
 	{
 		try
 		{
@@ -126,9 +126,14 @@ public partial class ProjectDetailPageModel : ObservableObject, IQueryAttributab
 
 			IsBusy = true;
 			BusyTitle = "Getting task recommendations.";
-			BusyDetails = $"Given a project named '{projectName}', and these categories: {string.Join(", ", categoryTitles)}, looking up tasks.";
+			BusyDetails = $"Given a project named '{projectName}', and these categories: {string.Join(", ", categoryTitles)}, looking up required documents.";
 			
-			string _aboutMeText = Preferences.Default.Get("about_me_text", string.Empty);			var prompt = $"Given a project named '{projectName}', and these categories: {string.Join(", ", categoryTitles)}, pick the best matching category and suggest 3-7 tasks for this project. Use these details about me so the writing sounds like me: {_aboutMeText}";// Respond as JSON: {{\"category\":\"category name\",\"tasks\":[\"task1\",\"task2\"]}}
+			string _aboutMeText = Preferences.Default.Get("about_me_text", string.Empty);
+            var prompt = $"Given a project named '{projectName}'," +
+                $" and these categories: {string.Join(", ", categoryTitles)}," +
+                $" pick the best matching set of documents for the architectural process of a solution and suggest 3-7 documents for this project." +
+                $" Use these details about the '{projectDescription}' so the writing sounds like profesional architect ITIL 4 certified" +
+                $" Take into consideration the types of documents every architect needs to know.";// Respond as JSON: {{\"category\":\"category name\",\"tasks\":[\"task1\",\"task2\"]}}
 
 			await Task.Delay(2000);
 
@@ -136,7 +141,7 @@ public partial class ProjectDetailPageModel : ObservableObject, IQueryAttributab
 			var response = await chatClient.GetResponseAsync<RecommendationResponse>(prompt);
 
 			BusyDetails = "Processing the recommendations.";
-			BusyDetails = $"We have {response?.Result.Tasks.Count} tasks to recommend that we think could be amazing.";
+			BusyDetails = $"We have {response?.Result.Tasks.Count} documents to recommend that we think could be amazing.";
 
 			await Task.Delay(2000);
 

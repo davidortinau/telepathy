@@ -26,6 +26,12 @@
         Icon="{StaticResource IconMeta}"
         ContentTemplate="{DataTemplate pages:ManageMetaPage}"
         Route="manage" />
+    
+    <ShellContent
+     Title="Settings"
+     Icon="{StaticResource IconMeta}"
+     ContentTemplate="{DataTemplate pages:ManageMetaPage}"
+     Route="manage" />
 
     <Shell.FlyoutHeader>
         <Grid HorizontalOptions="Fill" VerticalOptions="Start">
